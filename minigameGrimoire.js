@@ -8,36 +8,36 @@ M.launch=function()
 	M.init=function(div)
 	{
 		//populate div with html and initialize values
-		
+
 		M.spells={
 			'conjure baked goods':{
 				name:'Conjure Baked Goods',
-				desc:'Summon half an hour worth of your CpS, capped at 15% of your cookies owned.',
+				desc:'Summon half an hour worth of your CpS, capped at 15% of your oranges owned.',
 				failDesc:'Trigger a 15-minute clot and lose 15 minutes of CpS.',
 				icon:[21,11],
 				costMin:2,
 				costPercent:0.4,
 				win:function()
 				{
-					var val=Math.max(7,Math.min(Game.cookies*0.15,Game.cookiesPs*60*30));
+					var val=Math.max(7,Math.min(Game.oranges*0.15,Game.orangesPs*60*30));
 					Game.Earn(val);
-					Game.Notify('Conjure baked goods!','You magic <b>'+Beautify(val)+' cookie'+(val==1?'':'s')+'</b> out of thin air.',[21,11],6);
-					Game.Popup('<div style="font-size:80%;">+'+Beautify(val)+' cookie'+(val==1?'':'s')+'!</div>',Game.mouseX,Game.mouseY);
+					Game.Notify('Conjure baked goods!','You magic <b>'+Beautify(val)+' orange'+(val==1?'':'s')+'</b> out of thin air.',[21,11],6);
+					Game.Popup('<div style="font-size:80%;">+'+Beautify(val)+' orange'+(val==1?'':'s')+'!</div>',Game.mouseX,Game.mouseY);
 				},
 				fail:function()
 				{
 					var buff=Game.gainBuff('clot',60*15,0.5);
-					var val=Math.min(Game.cookies*0.15,Game.cookiesPs*60*15)+13;
-					val=Math.min(Game.cookies,val);
+					var val=Math.min(Game.oranges*0.15,Game.orangesPs*60*15)+13;
+					val=Math.min(Game.oranges,val);
 					Game.Spend(val);
 					Game.Notify(buff.name,buff.desc,buff.icon,6);
-					Game.Popup('<div style="font-size:80%;">Backfire!<br>Summoning failed! Lost '+Beautify(val)+' cookie'+(val==1?'':'s')+'!</div>',Game.mouseX,Game.mouseY);
+					Game.Popup('<div style="font-size:80%;">Backfire!<br>Summoning failed! Lost '+Beautify(val)+' orange'+(val==1?'':'s')+'!</div>',Game.mouseX,Game.mouseY);
 				},
 			},
 			'hand of fate':{
 				name:'Force the Hand of Fate',
-				desc:'Summon a random golden cookie. Each existing golden cookie makes this spell +15% more likely to backfire.',
-				failDesc:'Summon an unlucky wrath cookie.',
+				desc:'Summon a random golden orange. Each existing golden orange makes this spell +15% more likely to backfire.',
+				failDesc:'Summon an unlucky wrath orange.',
 				icon:[22,11],
 				costMin:10,
 				costPercent:0.6,
@@ -49,15 +49,15 @@ M.launch=function()
 				{
 					var newShimmer=new Game.shimmer('golden',{noWrath:true});
 					var choices=[];
-					choices.push('frenzy','multiply cookies');
+					choices.push('frenzy','multiply oranges');
 					if (!Game.hasBuff('Dragonflight')) choices.push('click frenzy');
-					if (Math.random()<0.1) choices.push('cookie storm','cookie storm','blab');
+					if (Math.random()<0.1) choices.push('orange storm','orange storm','blab');
 					if (Game.BuildingsOwned>=10 && Math.random()<0.25) choices.push('building special');
-					//if (Math.random()<0.2) choices.push('clot','cursed finger','ruin cookies');
-					if (Math.random()<0.15) choices=['cookie storm drop'];
+					//if (Math.random()<0.2) choices.push('clot','cursed finger','ruin oranges');
+					if (Math.random()<0.15) choices=['orange storm drop'];
 					if (Math.random()<0.0001) choices.push('free sugar lump');
 					newShimmer.force=choose(choices);
-					if (newShimmer.force=='cookie storm drop')
+					if (newShimmer.force=='orange storm drop')
 					{
 						newShimmer.sizeMult=Math.random()*0.75+0.25;
 					}
@@ -67,7 +67,7 @@ M.launch=function()
 				{
 					var newShimmer=new Game.shimmer('golden',{wrath:true});
 					var choices=[];
-					choices.push('clot','ruin cookies');
+					choices.push('clot','ruin oranges');
 					if (Math.random()<0.1) choices.push('cursed finger','blood frenzy');
 					if (Math.random()<0.003) choices.push('free sugar lump');
 					if (Math.random()<0.1) choices=['blab'];
@@ -113,7 +113,7 @@ M.launch=function()
 			},
 			'spontaneous edifice':{
 				name:'Spontaneous Edifice',
-				desc:'The spell picks a random building you could afford if you had twice your current cookies, and gives it to you for free. The building selected must be under 400, and cannot be your most-built one (unless it is your only one).',
+				desc:'The spell picks a random building you could afford if you had twice your current oranges, and gives it to you for free. The building selected must be under 400, and cannot be your most-built one (unless it is your only one).',
 				failDesc:'Lose a random building.',
 				icon:[24,11],
 				costMin:20,
@@ -129,7 +129,7 @@ M.launch=function()
 						if (Game.Objects[i].amount>0) n++;
 					}
 					for (var i in Game.Objects)
-					{if ((Game.Objects[i].amount<max || n==1) && Game.Objects[i].getPrice()<=Game.cookies*2 && Game.Objects[i].amount<400) buildings.push(Game.Objects[i]);}
+					{if ((Game.Objects[i].amount<max || n==1) && Game.Objects[i].getPrice()<=Game.oranges*2 && Game.Objects[i].amount<400) buildings.push(Game.Objects[i]);}
 					if (buildings.length==0){Game.Popup('<div style="font-size:80%;">No buildings to improve!</div>',Game.mouseX,Game.mouseY);return -1;}
 					var building=choose(buildings);
 					building.buyFree(1);
@@ -258,8 +258,8 @@ M.launch=function()
 		};
 		M.spellsById=[];var n=0;
 		for (var i in M.spells){M.spells[i].id=n;M.spellsById[n]=M.spells[i];n++;}
-		
-		
+
+
 		M.computeMagicM=function()
 		{
 			var towers=Math.max(M.parent.amount,1);
@@ -285,7 +285,7 @@ M.launch=function()
 			*/
 			M.magic=Math.min(M.magicM,M.magic);
 		}
-		
+
 		M.getFailChance=function(spell)
 		{
 			var failChance=0.15;
@@ -294,7 +294,7 @@ M.launch=function()
 			if (spell.failFunc) failChance=spell.failFunc(failChance);
 			return failChance;
 		}
-		
+
 		M.castSpell=function(spell,obj)
 		{
 			var obj=obj||{};
@@ -321,20 +321,20 @@ M.launch=function()
 					if (M.spellsCastTotal>=99) Game.Win('I\'m the wiz');
 					if (M.spellsCastTotal>=999) Game.Win('A wizard is you');
 				}
-				
+
 				M.magic-=cost;
 				M.magic=Math.max(0,M.magic);
-				
+
 				var rect=l('grimoireSpell'+spell.id).getBoundingClientRect();
 				Game.SparkleAt((rect.left+rect.right)/2,(rect.top+rect.bottom)/2-24);
-				
+
 				if (fail) PlaySound('snd/spellFail.mp3',0.75); else PlaySound('snd/spell.mp3',0.75);
 				return true;
 			}
 			PlaySound('snd/spellFail.mp3',0.75);
 			return false;
 		}
-		
+
 		M.getSpellCost=function(spell)
 		{
 			var out=spell.costMin;
@@ -348,7 +348,7 @@ M.launch=function()
 			else str+=Beautify(spell.costMin)+' magic';
 			return str;
 		}
-		
+
 		M.spellTooltip=function(id)
 		{
 			return function(){
@@ -367,7 +367,7 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		var str='';
 		str+='<style>'+
 		'#grimoireBG{background:url(img/shadedBorders.png),url(img/BGgrimoire.jpg);background-size:100% 100%,auto;position:absolute;left:0px;right:0px;top:0px;bottom:16px;}'+
@@ -388,11 +388,11 @@ M.launch=function()
 		'.grimoireSpell:nth-child(4n+1){background-position:-60px 0px;} .grimoireSpell:nth-child(4n+1):hover{background-position:-60px -74px;} .grimoireSpell:nth-child(4n+1):active{background-position:-60px 74px;}'+
 		'.grimoireSpell:nth-child(4n+2){background-position:-120px 0px;} .grimoireSpell:nth-child(4n+2):hover{background-position:-120px -74px;} .grimoireSpell:nth-child(4n+2):active{background-position:-120px 74px;}'+
 		'.grimoireSpell:nth-child(4n+3){background-position:-180px 0px;} .grimoireSpell:nth-child(4n+3):hover{background-position:-180px -74px;} .grimoireSpell:nth-child(4n+3):active{background-position:-180px 74px;}'+
-		
+
 		'.grimoireSpell:hover .grimoireIcon{top:-1px;}'+
 		'.grimoireSpell.ready:hover .grimoireIcon{animation-name:bounce;animation-iteration-count:infinite;animation-duration:0.8s;}'+
 		'.noFancy .grimoireSpell.ready:hover .grimoireIcon{animation:none;}'+
-		
+
 		'#grimoireInfo{text-align:center;font-size:11px;margin-top:12px;color:rgba(255,255,255,0.75);text-shadow:-1px 1px 0px #000;}'+
 		'</style>';
 		str+='<div id="grimoireBG"></div>';
@@ -420,7 +420,7 @@ M.launch=function()
 			var me=M.spells[i];
 			AddEvent(l('grimoireSpell'+me.id),'click',function(spell){return function(){PlaySound('snd/tick.mp3');M.castSpell(spell);}}(me));
 		}
-		
+
 		M.refillTooltip=function(){
 			return '<div style="padding:8px;width:300px;font-size:11px;text-align:center;">Click to refill <b>100 units</b> of your magic meter for <span class="price lump">1 sugar lump</span>.'+
 				(Game.canRefillLump()?'<br><small>(can be done once every '+Game.sayTime(Game.getLumpRefillMax(),-1)+')</small>':('<br><small class="red">(usable again in '+Game.sayTime(Game.getLumpRefillRemaining()+Game.fps,-1)+')</small>'))+
@@ -434,12 +434,12 @@ M.launch=function()
 				PlaySound('snd/pop'+Math.floor(Math.random()*3+1)+'.mp3',0.75);
 			});}
 		});
-		
+
 		M.computeMagicM();
 		M.magic=M.magicM;
 		M.spellsCast=0;
 		M.spellsCastTotal=0;
-		
+
 		//M.parent.switchMinigame(1);
 	}
 	M.save=function()

@@ -8,7 +8,7 @@ M.launch=function()
 	M.init=function(div)
 	{
 		//populate div with html and initialize values
-				
+
 		M.gods={
 			'asceticism':{
 				name:'Holobore, Spirit of Asceticism',
@@ -16,15 +16,15 @@ M.launch=function()
 				desc1:'<span class="green">+15% base CpS.</span>',
 				desc2:'<span class="green">+10% base CpS.</span>',
 				desc3:'<span class="green">+5% base CpS.</span>',
-				descAfter:'<span class="red">If a golden cookie is clicked, this spirit is unslotted and all worship swaps will be used up.</span>',
+				descAfter:'<span class="red">If a golden orange is clicked, this spirit is unslotted and all worship swaps will be used up.</span>',
 				quote:'An immortal life spent focusing on the inner self, away from the distractions of material wealth.',
 			},
 			'decadence':{
 				name:'Vomitrax, Spirit of Decadence',
 				icon:[22,18],
-				desc1:'<span class="green">Golden and wrath cookie effect duration +7%,</span> <span class="red">but buildings grant -7% CpS.</span>',
-				desc2:'<span class="green">Golden and wrath cookie effect duration +5%,</span> <span class="red">but buildings grant -5% CpS.</span>',
-				desc3:'<span class="green">Golden and wrath cookie effect duration +2%,</span> <span class="red">but buildings grant -2% CpS.</span>',
+				desc1:'<span class="green">Golden and wrath orange effect duration +7%,</span> <span class="red">but buildings grant -7% CpS.</span>',
+				desc2:'<span class="green">Golden and wrath orange effect duration +5%,</span> <span class="red">but buildings grant -5% CpS.</span>',
+				desc3:'<span class="green">Golden and wrath orange effect duration +2%,</span> <span class="red">but buildings grant -2% CpS.</span>',
 				quote:'This sleazy spirit revels in the lust for quick easy gain and contempt for the value of steady work.',
 			},
 			'ruin':{
@@ -82,26 +82,26 @@ M.launch=function()
 			'industry':{
 				name:'Jeremy, Spirit of Industry',
 				icon:[28,18],
-				desc1:'<span class="green">Buildings produce 10% more cookies,</span> <span class="red">but golden and wrath cookies appear 10% less.</span>',
-				desc2:'<span class="green">Buildings produce 6% more cookies,</span> <span class="red">but golden and wrath cookies appear 6% less.</span>',
-				desc3:'<span class="green">Buildings produce 3% more cookies,</span> <span class="red">but golden and wrath cookies appear 3% less.</span>',
+				desc1:'<span class="green">Buildings produce 10% more oranges,</span> <span class="red">but golden and wrath oranges appear 10% less.</span>',
+				desc2:'<span class="green">Buildings produce 6% more oranges,</span> <span class="red">but golden and wrath oranges appear 6% less.</span>',
+				desc3:'<span class="green">Buildings produce 3% more oranges,</span> <span class="red">but golden and wrath oranges appear 3% less.</span>',
 				quote:'While this spirit has many regrets, helping you rule the world through constant industrialization is not one of them.',
 			},
 			'mother':{
 				name:'Mokalsium, Mother Spirit',
 				icon:[29,18],
-				desc1:'<span class="green">Milk is 10% more powerful,</span> <span class="red">but golden and wrath cookies appear 15% less.</span>',
-				desc2:'<span class="green">Milk is 5% more powerful,</span> <span class="red">but golden and wrath cookies appear 10% less.</span>',
-				desc3:'<span class="green">Milk is 3% more powerful,</span> <span class="red">but golden and wrath cookies appear 5% less.</span>',
+				desc1:'<span class="green">Milk is 10% more powerful,</span> <span class="red">but golden and wrath oranges appear 15% less.</span>',
+				desc2:'<span class="green">Milk is 5% more powerful,</span> <span class="red">but golden and wrath oranges appear 10% less.</span>',
+				desc3:'<span class="green">Milk is 3% more powerful,</span> <span class="red">but golden and wrath oranges appear 5% less.</span>',
 				quote:'A caring spirit said to contain itself, inwards infinitely.',
 			},
 			'scorn':{
 				name:'Skruuia, Spirit of Scorn',
 				icon:[21,19],
-				descBefore:'<span class="red">All golden cookies are wrath cookies with a greater chance of a negative effect.</span>',
-				desc1:'<span class="green">Wrinklers appear 150% faster and digest 15% more cookies.</span>',
-				desc2:'<span class="green">Wrinklers appear 100% faster and digest 10% more cookies.</span>',
-				desc3:'<span class="green">Wrinklers appear 50% faster and digest 5% more cookies.</span>',
+				descBefore:'<span class="red">All golden oranges are wrath oranges with a greater chance of a negative effect.</span>',
+				desc1:'<span class="green">Wrinklers appear 150% faster and digest 15% more oranges.</span>',
+				desc2:'<span class="green">Wrinklers appear 100% faster and digest 10% more oranges.</span>',
+				desc3:'<span class="green">Wrinklers appear 50% faster and digest 5% more oranges.</span>',
 				quote:'This spirit enjoys poking foul beasts and watching them squirm, but has no love for its own family.',
 			},
 			'order':{
@@ -121,22 +121,22 @@ M.launch=function()
 		};
 		M.godsById=[];var n=0;
 		for (var i in M.gods){M.gods[i].id=n;M.gods[i].slot=-1;M.godsById[n]=M.gods[i];n++;}
-		
-		
+
+
 		M.slot=[];
 		M.slot[0]=-1;//diamond socket
 		M.slot[1]=-1;//ruby socket
 		M.slot[2]=-1;//jade socket
-		
+
 		M.slotNames=[
 			'Diamond','Ruby','Jade'
 		];
-		
+
 		M.swaps=3;//swaps left
 		M.swapT=Date.now();//the last time we swapped
-		
+
 		M.lastSwapT=0;//frames since last swap
-		
+
 		M.godTooltip=function(id)
 		{
 			return function(){
@@ -156,7 +156,7 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		M.slotTooltip=function(id)
 		{
 			return function(){
@@ -188,14 +188,14 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		M.useSwap=function(n)
 		{
 			M.swapT=Date.now();
 			M.swaps-=n;
 			if (M.swaps<0) M.swaps=0;
 		}
-		
+
 		M.slotGod=function(god,slot)
 		{
 			if (slot==god.slot) return false;
@@ -209,7 +209,7 @@ M.launch=function()
 			god.slot=slot;
 			Game.recalculateGains=true;
 		}
-		
+
 		M.dragging=false;
 		M.dragGod=function(what)
 		{
@@ -241,7 +241,7 @@ M.launch=function()
 			{
 				M.useSwap(1);
 				M.lastSwapT=0;
-				
+
 				var prev=M.slot[M.slotHovered];//id of the god already in the slot
 				if (prev!=-1)
 				{
@@ -259,10 +259,10 @@ M.launch=function()
 				}
 				l('templeSlot'+M.slotHovered).appendChild(div);
 				M.slotGod(M.dragging,M.slotHovered);
-				
+
 				PlaySound('snd/tick.mp3');
 				PlaySound('snd/spirit.mp3',0.5);
-				
+
 				var rect=div.getBoundingClientRect();
 				Game.SparkleAt((rect.left+rect.right)/2,(rect.top+rect.bottom)/2-24);
 			}
@@ -276,7 +276,7 @@ M.launch=function()
 			}
 			M.dragging=false;
 		}
-		
+
 		M.slotHovered=-1;
 		M.hoverSlot=function(what)
 		{
@@ -288,7 +288,7 @@ M.launch=function()
 				PlaySound('snd/clickb'+Math.floor(Math.random()*7+1)+'.mp3',0.75);
 			}
 		}
-		
+
 		//external
 		Game.hasGod=function(what)
 		{
@@ -311,8 +311,8 @@ M.launch=function()
 			return true;
 		}
 		Game.useSwap=M.useSwap;
-		
-		
+
+
 		var str='';
 		str+='<style>'+
 		'#templeBG{background:url(img/shadedBorders.png),url(img/BGpantheon.jpg);background-size:100% 100%,auto;position:absolute;left:0px;right:0px;top:0px;bottom:16px;}'+
@@ -330,11 +330,11 @@ M.launch=function()
 		'.templeGod1{background-position:-60px 0px;} .templeGod1:hover{background-position:-60px -74px;} .templeGod1:active{background-position:-60px 74px;}'+
 		'.templeGod2{background-position:-120px 0px;} .templeGod2:hover{background-position:-120px -74px;} .templeGod2:active{background-position:-120px 74px;}'+
 		'.templeGod3{background-position:-180px 0px;} .templeGod3:hover{background-position:-180px -74px;} .templeGod3:active{background-position:-180px 74px;}'+
-		
+
 		'.templeGod:hover .templeIcon{top:-1px;}'+
 		'.templeGod.ready:hover .templeIcon{animation-name:bounce;animation-iteration-count:infinite;animation-duration:0.8s;}'+
 		'.noFancy .templeGod.ready:hover .templeIcon{animation:none;}'+
-		
+
 		'.templeGem{z-index:100;width:24px;height:24px;}'+
 		'.templeEffect{font-weight:bold;font-size:11px;position:relative;margin:0px -12px;padding:4px;padding-left:28px;}'+
 		'.description .templeEffect{border-top:1px solid rgba(255,255,255,0.15);background:linear-gradient(to top,rgba(255,255,255,0.1),rgba(255,255,255,0));}'+
@@ -344,23 +344,23 @@ M.launch=function()
 		'.templeGem1{background-position:-1104px -720px;}'+
 		'.templeGem2{background-position:-1128px -720px;}'+
 		'.templeGem3{background-position:-1104px -744px;}'+
-		
+
 		'.templeSlot .templeGod,.templeSlot .templeGod:hover,.templeSlot .templeGod:active{background:none;}'+
-		
+
 		'.templeSlotDrag{position:absolute;left:0px;top:0px;right:0px;bottom:0px;background:#999;opacity:0;cursor:pointer;}'+
-		
+
 		'#templeDrag{position:absolute;left:0px;top:0px;z-index:1000000000000;}'+
 		'.templeGod{transition:transform 0.1s;}'+
 		'#templeDrag .templeGod{position:absolute;left:0px;top:0px;}'+
 		'.templeDragged{pointer-events:none;}'+
-		
+
 		'.templeGodPlaceholder{background:red;opacity:0;display:none;width:60px;height:74px;}'+
-		
+
 		'#templeSlots{margin:4px auto;text-align:center;}'+
 		'#templeSlot0{top:-4px;}'+
 		'#templeSlot1{top:0px;}'+
 		'#templeSlot2{top:4px;}'+
-		
+
 		'#templeInfo{position:relative;display:inline-block;margin:8px auto 0px auto;padding:8px 16px;padding-left:32px;text-align:center;font-size:11px;color:rgba(255,255,255,0.75);text-shadow:-1px 1px 0px #000;background:rgba(0,0,0,0.75);border-radius:16px;}'+
 		'</style>';
 		str+='<div id="templeBG"></div>';
@@ -387,7 +387,7 @@ M.launch=function()
 		div.innerHTML=str;
 		M.swapsL=l('templeSwaps');
 		M.lumpRefill=l('templeLumpRefill');
-		
+
 		for (var i in M.gods)
 		{
 			var me=M.gods[i];
@@ -400,10 +400,10 @@ M.launch=function()
 			AddEvent(l('templeSlot'+i),'mouseover',function(what){return function(){M.hoverSlot(what);}}(i));
 			AddEvent(l('templeSlot'+i),'mouseout',function(what){return function(e){if (e.button==0){M.hoverSlot(-1);}}}(i));
 		}
-		
+
 		AddEvent(document,'mouseup',M.dropGod);
-		
-		
+
+
 		M.refillTooltip=function(){
 			return '<div style="padding:8px;width:300px;font-size:11px;text-align:center;">Click to refill all your worship swaps for <span class="price lump">1 sugar lump</span>.'+
 				(Game.canRefillLump()?'<br><small>(can be done once every '+Game.sayTime(Game.getLumpRefillMax(),-1)+')</small>':('<br><small class="red">(usable again in '+Game.sayTime(Game.getLumpRefillRemaining()+Game.fps,-1)+')</small>'))+
@@ -417,7 +417,7 @@ M.launch=function()
 				PlaySound('snd/pop'+Math.floor(Math.random()*3+1)+'.mp3',0.75);
 			});}
 		});
-		
+
 		//M.parent.switchMinigame(1);
 	}
 	M.save=function()

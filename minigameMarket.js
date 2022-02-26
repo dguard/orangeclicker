@@ -8,7 +8,7 @@ M.launch=function()
 	M.init=function(div)
 	{
 		//populate div with html and initialize values
-				
+
 		M.goods={
 			'Farm':{
 				name:'Cereals',
@@ -86,13 +86,13 @@ M.launch=function()
 				name:'Honey',
 				symbol:'HNY',
 				company:'Prosperity Hive',
-				desc:'The folks at <b>Prosperity Hive</b> deal in honey, and it\'s always worked for them. With a work culture so relaxed you\'re almost tempted to ditch the cookie business and join them, these people have little in common with the proverbial busy bee - though their rates do sting quite a bit.',
+				desc:'The folks at <b>Prosperity Hive</b> deal in honey, and it\'s always worked for them. With a work culture so relaxed you\'re almost tempted to ditch the orange business and join them, these people have little in common with the proverbial busy bee - though their rates do sting quite a bit.',
 			},
 			'Fractal engine':{
-				name:'Cookies',
+				name:'Oranges',
 				symbol:'CKI',
 				company:'Selfmade Bakeries',
-				desc:'Interesting. It appears there\'s still a company out there trying to sell cookies even with your stranglehold on the market. No matter - you figure <b>Selfmade Bakeries</b>\' largely inferior product will make decent fodder for the mouse traps in your factories.',
+				desc:'Interesting. It appears there\'s still a company out there trying to sell oranges even with your stranglehold on the market. No matter - you figure <b>Selfmade Bakeries</b>\' largely inferior product will make decent fodder for the mouse traps in your factories.',
 			},
 			'Javascript console':{
 				name:'Recipes',
@@ -109,7 +109,7 @@ M.launch=function()
 		};
 		M.goodsById=[];var n=0;
 		for (var i in M.goods){var it=M.goods[i];it.id=n;it.hidden=false;it.active=false;it.last=0;it.building=Game.Objects[i];it.stock=0;it.mode=0;it.dur=0;it.val=1;it.vals=[it.val];it.d=0;M.goodsById[n]=it;it.icon=[it.building.iconColumn,33];n++;}
-		
+
 		M.goodTooltip=function(id)
 		{
 			return function(){
@@ -134,14 +134,14 @@ M.launch=function()
 				var me=M.goodsById[id];
 				var icon=me.icon||[0,0];
 				var val=M.getGoodPrice(me)
-				var cost=Game.cookiesPsRawHighest*val;
+				var cost=Game.orangesPsRawHighest*val;
 				var buyOrSell=n>0;
 				var overhead=1;
 				var stock=me.stock;
 				var maxStock=M.getGoodMaxStock(me);
 				if (buyOrSell) overhead*=1+0.01*(20*Math.pow(0.95,M.brokers));
 				cost*=overhead;
-				if (n==10000) n=Math.floor(Game.cookies/cost);
+				if (n==10000) n=Math.floor(Game.oranges/cost);
 				else if (n==-10000) n=me.stock;
 				n=Math.abs(n);
 				if (buyOrSell) n=Math.min(n,maxStock-stock);
@@ -154,7 +154,7 @@ M.launch=function()
 					(overhead>1?('<div style="font-size:9px;opacity:0.6;">(+<b>'+Beautify((overhead-1)*100,2)+'%</b> overhead)</div>'):'')+
 					'<div class="line"></div>'+
 					'<div style="font-size:9px;opacity:0.6;font-weight:bold;">'+(buyOrSell?'you spend':'you earn')+':</div>'+
-					'<div><b class="hasTinyCookie '+(n<=0?'gray':(Game.cookies>=cost*n || !buyOrSell)?'green':'red')+'">'+Beautify(cost*n)+'</b></div>'+
+					'<div><b class="hasTinyOrange '+(n<=0?'gray':(Game.oranges>=cost*n || !buyOrSell)?'green':'red')+'">'+Beautify(cost*n)+'</b></div>'+
 					(n>0?('<div style="font-size:9px;opacity:0.6;font-weight:bold;">($'+Beautify(val*overhead*n,2)+')</div>'+
 					'<div style="font-size:9px;opacity:0.6;font-weight:bold;">('+Game.sayTime(val*overhead*n*Game.fps,-1)+' of CpS)</div>'):'')+
 					(((me.last==1 && !buyOrSell) || (me.last==2 && buyOrSell))?'<div class="line"></div><div class="red">You cannot buy and sell this stock in the same tick.</div>':'')+
@@ -162,7 +162,7 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		M.goodDelta=function(id,back)//if back is 0 we get the current step; else get current step -back
 		{
 			var back=back||0;
@@ -175,7 +175,7 @@ M.launch=function()
 			val=Math.floor(val*10000)/100;
 			return val;
 		}
-		
+
 		M.getGoodMaxStock=function(good)
 		{
 			var bonus=0;
@@ -193,12 +193,12 @@ M.launch=function()
 		{
 			var me=M.goodsById[id];
 			var costInS=M.getGoodPrice(me);
-			var cost=Game.cookiesPsRawHighest*costInS;
+			var cost=Game.orangesPsRawHighest*costInS;
 			var overhead=1+0.01*(20*Math.pow(0.95,M.brokers));
 			cost*=overhead;
-			if (n==10000) n=Math.floor(Game.cookies/cost);
+			if (n==10000) n=Math.floor(Game.oranges/cost);
 			n=Math.min(n,M.getGoodMaxStock(me)-me.stock);
-			if (n>0 && me.last!=2 && Game.cookies>=cost*n && me.stock+n<=M.getGoodMaxStock(me))
+			if (n>0 && me.last!=2 && Game.oranges>=cost*n && me.stock+n<=M.getGoodMaxStock(me))
 			{
 				if (costInS*overhead*n>=86400) Game.Win('Buy buy buy');
 				M.profit-=costInS*overhead*n;
@@ -232,9 +232,9 @@ M.launch=function()
 				if (M.profit>0) Game.Win('Initial public offering');
 				if (M.profit>=10000000) Game.Win('Liquid assets');
 				if (M.profit>=31536000) Game.Win('Gaseous assets');
-				//Game.Earn(Game.cookiesPsRawHighest*costInS*n);
-				Game.cookies+=Game.cookiesPsRawHighest*costInS*n;
-				Game.cookiesEarned=Math.max(Game.cookies,Game.cookiesEarned);
+				//Game.Earn(Game.orangesPsRawHighest*costInS*n);
+				Game.oranges+=Game.orangesPsRawHighest*costInS*n;
+				Game.orangesEarned=Math.max(Game.oranges,Game.orangesEarned);
 				me.stock-=n;
 				me.last=2;
 				PlaySound('snd/cashIn.mp3',0.4);
@@ -246,7 +246,7 @@ M.launch=function()
 		{
 			return 10+10*id+(Game.Objects['Bank'].level-1);
 		}
-		
+
 		M.updateGoodStyle=function(id)
 		{
 			var me=M.goodsById[id];
@@ -272,7 +272,7 @@ M.launch=function()
 				me.graphIconL.style.display='none';
 			}
 		}
-		
+
 		M.officeLevel=0;
 		M.offices=[
 			{name:'Credit garage',icon:[0,33],cost:[100,2],desc:'This is your starting office.<br>Upgrading will grant you:<br><b><!--&bull; +1 opportunity slot<br>-->&bull; +25 warehouse space for all goods</b>'},
@@ -282,7 +282,7 @@ M.launch=function()
 			{name:'International exchange',icon:[12,33],cost:[700,12],desc:'This is your office.<br>Upgrading will grant you:<br><b>&bull; +1 loan slot<br><!--&bull; +1 opportunity slot<br>-->&bull; +50% base warehouse space for all goods</b>'},
 			{name:'Palace of Greed',icon:[18,33],cost:0,desc:'This is your office.<br>It is fully upgraded. Its lavish interiors, spanning across innumerable floors, are host to many a decadent party, owing to your nigh-unfathomable wealth.'},
 		];
-		
+
 		M.officeTooltip=function()
 		{
 			return function(){
@@ -303,11 +303,11 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		M.brokers=0;
-		
+
 		M.getMaxBrokers=function(){return Math.ceil(Game.Objects['Grandma'].highest/10+Game.Objects['Grandma'].level);}
-		M.getBrokerPrice=function(){return Game.cookiesPsRawHighest*60*20;}
+		M.getBrokerPrice=function(){return Game.orangesPsRawHighest*60*20;}
 		M.brokersTooltip=function()
 		{
 			return function(){
@@ -316,21 +316,21 @@ M.launch=function()
 				'<div class="icon" style="float:left;margin-left:-8px;margin-top:-8px;background-position:'+(-icon[0]*48)+'px '+(-icon[1]*48)+'px;"></div>'+
 				'<div class="name">Stockbrokers <span style="font-size:11px;opacity:0.6;">(you have '+Beautify(M.brokers)+')</span></div>'+
 				'<div class="line"></div><div class="description" style="font-size:11px;">'+
-					'A nice broker to trade more cookies.<br>'+
+					'A nice broker to trade more oranges.<br>'+
 					'&bull; Buying goods normally incurs overhead costs of <b>20% extra</b>. Each broker you hire reduces that cost by <b>5%</b>.<br>'+
 					'&bull; Current overhead costs thanks to your '+Beautify(M.brokers)+' broker'+(M.brokers==1?'':'s')+': <b>+'+Beautify(20*Math.pow(0.95,M.brokers),2)+'%</b><br>'+
-					'&bull; Buying a broker costs <b class="hasTinyCookie '+(Game.cookies>=M.getBrokerPrice()?'green':'red')+'">20 minutes</b> of CpS (that\'s $1200).<br>'+
+					'&bull; Buying a broker costs <b class="hasTinyOrange '+(Game.oranges>=M.getBrokerPrice()?'green':'red')+'">20 minutes</b> of CpS (that\'s $1200).<br>'+
 					'&bull; Maximum number of brokers you can own: <b class="'+(M.brokers<M.getMaxBrokers()?'green':'red')+'">'+Beautify(M.getMaxBrokers())+'</b> (the highest amount of grandmas you\'ve owned this run, divided by 10, plus your grandma level)<br>'+
 					'<q>Brokers are Wall Street-class grandmas versed in the ways of finance. Stockbroker grandmas work hard and play hard, and will fight telephone in hand to get your clients the best possible deals - with a sizeable profit margin for you, of course.</q>'+
 					'<div class="line"></div><div style="font-size:11px;text-align:center;">'+
-						'Hiring a new broker will cost you <b class="hasTinyCookie '+(Game.cookies>=M.getBrokerPrice()?'green':'red')+'">'+Beautify(M.getBrokerPrice())+' cookies</b>.'+
+						'Hiring a new broker will cost you <b class="hasTinyOrange '+(Game.oranges>=M.getBrokerPrice()?'green':'red')+'">'+Beautify(M.getBrokerPrice())+' oranges</b>.'+
 					'</div>'+
 				'</div>'+
 				'</div>';
 				return str;
 			};
 		}
-		
+
 		M.loanTypes=[
 			//name, mult, duration, payback mult, duration, downpayment (as % of bank), quote
 			['a modest loan',1.5,60*2,0.25,60*4,0.2,'Buy that vintage car you\'ve always wanted. Just pay us back.'],
@@ -346,7 +346,7 @@ M.launch=function()
 				'<div class="line"></div><div class="description" style="font-size:11px;">'+
 					'By taking this loan, you will get <b class="green">+'+Math.round((loan[1]-1)*100)+'%</b> CpS for the next <b>'+Game.sayTime(60*loan[2]*Game.fps)+'</b>.<br>'+
 					'However, you will get <b class="red">'+Math.round((loan[3]-1)*100)+'%</b> CpS for the next <b>'+Game.sayTime(60*loan[4]*Game.fps)+'</b> after that.<br>'+
-					'You must also pay an immediate downpayment of <b class="hasTinyCookie red">'+Beautify(Game.cookies*loan[5])+'</b> (<b>'+(loan[5]*100)+'%</b> of your current bank).<br>'+
+					'You must also pay an immediate downpayment of <b class="hasTinyOrange red">'+Beautify(Game.oranges*loan[5])+'</b> (<b>'+(loan[5]*100)+'%</b> of your current bank).<br>'+
 					'<q>'+loan[6]+'</q>'+
 				'</div>';
 				return str;
@@ -358,7 +358,7 @@ M.launch=function()
 			if (!interest)
 			{
 				if (Game.hasBuff('Loan '+id) || Game.hasBuff('Loan '+id+' (interest)')) return false;
-				Game.Spend(Game.cookies*loan[5]);
+				Game.Spend(Game.oranges*loan[5]);
 				Game.gainBuff('loan '+id,loan[2]*60,loan[1]);
 			}
 			else
@@ -369,7 +369,7 @@ M.launch=function()
 			return true;
 		}
 		Game.takeLoan=M.takeLoan;
-		
+
 		M.getOppSlots=function()
 		{
 			var slots=0;
@@ -378,9 +378,9 @@ M.launch=function()
 			if (M.officeLevel>4) slots++;
 			return slots;
 		}
-		
+
 		//note : opportunity system to be added later maybe
-		
+
 		M.oppTooltip=function()
 		{
 			return function(){
@@ -392,19 +392,19 @@ M.launch=function()
 				return str;
 			};
 		}
-		
+
 		M.refillTooltip=function(){
 			return '<div style="padding:8px;width:300px;font-size:11px;text-align:center;">Click to refill your opportunity timer (and give a quick burst to your economy) for <span class="price lump">1 sugar lump</span>.'+
 				(Game.canRefillLump()?'<br><small>(can be done once every '+Game.sayTime(Game.getLumpRefillMax(),-1)+')</small>':('<br><small class="red">(usable again in '+Game.sayTime(Game.getLumpRefillRemaining()+Game.fps,-1)+')</small>'))+
 			'</div>';
 		};
-		
-		
+
+
 		var str='';
 		str+='<style>'+
 		'#bankBG{background:url(img/shadedBorders.png),url(img/BGmarket.jpg);background-size:100% 100%,auto;position:absolute;left:0px;right:0px;top:0px;bottom:16px;}'+
 		'#bankContent{position:relative;box-sizing:border-box;padding:4px;text-align:center;}'+
-		
+
 		'.bankGood{margin:2px;display:inline-block;width:156px;text-align:center;position:relative;left:0px;top:0px;right:0px;box-sizing:border-box;box-shadow:0px 0px 0px 1px rgba(255,255,255,0.1), 2px 2px 4px rgba(0,0,0,0.5) inset;background:rgba(0,0,0,0.9);color:rgba(255,255,255,0.7);}'+
 		'.bankHidden{opacity:0.75;background:transparent;box-shadow:none;}'+
 		'.bankButton{cursor:pointer;opacity:0.8;color:#94cd50;font-weight:bold;font-size:10px;border:1px solid #999;border-color:#94cd50 #1b7a2f #1b7a2f #94cd50;padding:2px 6px;margin:0px 1px 1px 0px;display:inline-block;}'+
@@ -428,19 +428,19 @@ M.launch=function()
 		'.bankSimpleButton:active{opacity:0.5;}'+
 		'.bankSimpleButton:hover{color:#fff;}'+
 		'</style>';
-		
+
 		str+='<div id="bankBG"></div>';
 		str+='<div id="bankContent">';
-			
+
 			str+='<div id="bankHeader" style="z-index:10;position:relative;">'+
 				'<div>'+
-					'<div style="padding:1px 4px;font-size:10px;color:rgba(255,255,255,0.5);">Profits: <span id="bankBalance">$0</span>. All prices are in <b style="color:#fff;">$</b>econds of your highest raw cookies per second. <span id="bankNextTick"></span></div>'+
+					'<div style="padding:1px 4px;font-size:10px;color:rgba(255,255,255,0.5);">Profits: <span id="bankBalance">$0</span>. All prices are in <b style="color:#fff;">$</b>econds of your highest raw oranges per second. <span id="bankNextTick"></span></div>'+
 					'<div id="bankOffice" style="display:inline-block;padding:0px 4px;" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.officeTooltip()','this')+'><div id="bankOfficeIcon" class="icon" style="pointer-events:none;display:inline-block;transform:scale(0.5);margin:-16px -18px -12px -14px;vertical-align:middle;background-position:'+(-0*48)+'px '+(-33*48)+'px;"></div><span id="bankOfficeName" class="bankSymbol" style="width:128px;"></span><div class="bankButton bankButtonBuy bankButtonOff" id="bankOfficeUpgrade">-</div></div>'+
 					'<div id="bankBrokers" style="display:inline-block;padding:0px 4px;" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.brokersTooltip()','this')+'><div id="bankBrokersIcon" class="icon" style="pointer-events:none;display:inline-block;transform:scale(0.5);margin:-16px -18px -12px -14px;vertical-align:middle;background-position:'+(-1*48)+'px '+(-33*48)+'px;"></div><span id="bankBrokersText" class="bankSymbol" style="width:96px;">no brokers</span><div class="bankButton bankButtonBuy bankButtonOff" id="bankBrokersBuy">Hire</div></div>'+
 					'<div style="display:inline-block;padding:0px 4px;"><div id="bankLoan1" style="display:none;" class="bankButton bankButtonSell bankButtonOff" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.loanTooltip(1)','this')+'>1st loan</div><div id="bankLoan2" style="display:none;" class="bankButton bankButtonSell bankButtonOff" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.loanTooltip(2)','this')+'>2nd loan</div><div id="bankLoan3" style="display:none;" class="bankButton bankButtonSell bankButtonOff" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.loanTooltip(3)','this')+'>3rd loan</div></div>'+
 					/*'<div style="display:inline-block;padding:0px 4px;"><div id="bankOpp" class="bankButton bankButtonBuy bankButtonOff" '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.oppTooltip()','this')+'>Generate opportunity</div> <div class="bankSymbol" style="position:relative;font-size:10px;color:rgba(255,255,255,0.6);padding-left:16px;"><div '+Game.getDynamicTooltip('Game.ObjectsById['+M.parent.id+'].minigame.refillTooltip','this')+' id="bankLumpRefill" class="usesIcon shadowFilter lumpRefill" style="left:-18px;top:-18px;background-position:'+(-29*48)+'px '+(-14*48)+'px;"></div>refresh</div></div>'+*/
 				'</div>';
-			
+
 			for (var i=0;i<M.goodsById.length;i++)
 			{
 				var me=M.goodsById[i];
@@ -469,12 +469,12 @@ M.launch=function()
 			}
 			str+='</div>';
 			str+='<div id="bankGraphBox"></div>';
-			
+
 		str+='</div>';
 		div.innerHTML=str;
-		
-		
-		
+
+
+
 		var str='';
 		str+='<div style="position:absolute;left:2px;top:2px;z-index:10;">'+
 			'<div id="bankGraphLines" class="bankSimpleButton" style="background:rgba(0,0,0,0.5);padding:2px;border-radius:4px;">Line style</div>'+
@@ -488,7 +488,7 @@ M.launch=function()
 			str+='<div id="bankGood-'+me.id+'-graphIcon" class="icon bankGraphIcon" style="pointer-events:none;transform:scale(0.5);background-position:'+(-me.icon[0]*48)+'px '+(-me.icon[1]*48)+'px;"></div>';
 		}
 		l('bankGraphBox').innerHTML=str;
-		
+
 		var div=document.createElement('canvas');
 		div.id='bankGraph';
 		div.style.marginLeft='-14px';
@@ -497,7 +497,7 @@ M.launch=function()
 		l('bankGraphBox').appendChild(div);
 		M.graph=div;
 		M.graphCtx=M.graph.getContext('2d',{alpha:false});
-		
+
 		AddEvent(l('bankGraphLines'),'click',function(e){
 			if (M.graphLines==0) M.graphLines=1;
 			else M.graphLines=0;
@@ -520,7 +520,7 @@ M.launch=function()
 			PlaySound('snd/tick.mp3');
 			});
 		}
-		
+
 		AddEvent(l('bankOfficeUpgrade'),'click',function(e){
 			var me=M.offices[M.officeLevel];
 			if (me.cost && Game.Objects['Cursor'].amount>=me.cost[0] && Game.Objects['Cursor'].level>=me.cost[1])
@@ -533,7 +533,7 @@ M.launch=function()
 			}
 		});
 		AddEvent(l('bankBrokersBuy'),'click',function(e){
-			if (M.brokers<M.getMaxBrokers() && Game.cookies>=M.getBrokerPrice())
+			if (M.brokers<M.getMaxBrokers() && Game.oranges>=M.getBrokerPrice())
 			{
 				Game.Spend(M.getBrokerPrice());
 				M.brokers+=1;
@@ -541,7 +541,7 @@ M.launch=function()
 				Game.SparkleOn(e.target);
 			}
 		});
-		
+
 		AddEvent(l('bankLoan1'),'click',function(e){
 			if (M.takeLoan(1)) {PlaySound('snd/cashIn2.mp3',0.6);Game.SparkleOn(e.target);}
 		});
@@ -551,7 +551,7 @@ M.launch=function()
 		AddEvent(l('bankLoan3'),'click',function(e){
 			if (M.takeLoan(3)) {PlaySound('snd/cashIn2.mp3',0.6);Game.SparkleOn(e.target);}
 		});
-		
+
 		for (var i=0;i<M.goodsById.length;i++)
 		{
 			var me=M.goodsById[i];
@@ -563,14 +563,14 @@ M.launch=function()
 			me.stockMaxL=l('bankGood-'+me.id+'-stockMax');
 			me.viewHideL=l('bankGood-'+me.id+'-viewHide');
 			me.graphIconL=l('bankGood-'+me.id+'-graphIcon');
-			
+
 			AddEvent(l('bankGood-'+i),'mouseover',function(i){return function(e){
 				if (M.hoverOnGood!=i) {M.hoverOnGood=i;M.toRedraw=2;}
 			}}(i));
 			AddEvent(l('bankGood-'+i),'mouseout',function(i){return function(e){
 				if (M.hoverOnGood==i) {M.hoverOnGood=-1;M.toRedraw=2;}
 			}}(i));
-			
+
 			AddEvent(l('bankGood-'+i+'-viewHide'),'click',function(i){return function(e){
 				if (Game.keys[16])//solo with shift-click
 				{
@@ -593,7 +593,7 @@ M.launch=function()
 				M.toRedraw=2;
 				PlaySound('snd/tick.mp3');
 			}}(i));
-			
+
 			AddEvent(l('bankGood-'+i+'_1'),'click',function(i){return function(e){
 				if (M.buyGood(i,1)) Game.SparkleOn(e.target);
 			}}(i));
@@ -619,9 +619,9 @@ M.launch=function()
 				if (M.sellGood(i,10000)) Game.SparkleOn(e.target);
 			}}(i));
 		}
-		
-		
-		
+
+
+
 		AddEvent(M.graph,'mousemove',function(e){
 			//get which graph line the mouse is over
 			var x=e.layerX;
@@ -672,7 +672,7 @@ M.launch=function()
 			if (M.hoverOnGood!=-1) {M.hoverOnGood=-1;M.toRedraw=2;}
 			Game.tooltip.shouldHide=1;
 		});
-		
+
 		M.reset();
 	}
 	M.onResize=function()
@@ -718,7 +718,7 @@ M.launch=function()
 		M.profit=parseFloat(spl2[i2++]||0);
 		M.graphCols=parseInt(spl2[i2++]||M.graphCols);M.setCols();
 		M.tickT=0;
-		
+
 		var goods=spl[i++].split('!');
 		for (var iG=0;iG<M.goodsById.length;iG++)
 		{
@@ -738,7 +738,7 @@ M.launch=function()
 			if (it.l) M.updateGoodStyle(it.id);
 		}
 		M.onResize();
-		
+
 		var on=parseInt(spl[i++]||0);if (on && Game.ascensionMode!=1) M.parent.switchMinigame(1);
 	}
 	M.reset=function(hard)
@@ -747,13 +747,13 @@ M.launch=function()
 		M.toRedraw=0;
 		M.officeLevel=0;
 		M.brokers=0;
-		
+
 		if (hard) {M.graphLines=1;M.graphCols=0;}M.setCols();
 		M.hoverOnGood=-1;
 		M.ticks=0;
 		M.lastTickDrawn=0;
 		M.profit=0;
-		
+
 		for (var i=0;i<M.goodsById.length;i++)
 		{
 			var it=M.goodsById[i];
@@ -774,9 +774,9 @@ M.launch=function()
 			M.tick();
 		}
 	}
-	
+
 	M.profit=0;
-	
+
 	M.ticks=0;
 	M.lastTickDrawn=0;
 	M.secondsPerTick=60;//1 tick every minute
@@ -786,16 +786,16 @@ M.launch=function()
 		{
 			var me=M.goodsById[i];
 			me.last=0;
-			
+
 			me.d*=0.97;
-			
+
 			if (me.mode==0) {me.d*=0.95;me.d+=0.05*(Math.random()-0.5);}
 			else if (me.mode==1) {me.d*=0.99;me.d+=0.05*(Math.random()-0.1);}
 			else if (me.mode==2) {me.d*=0.99;me.d-=0.05*(Math.random()-0.1);}
 			else if (me.mode==3) {me.d+=0.15*(Math.random()-0.1);me.val+=Math.random();}
 			else if (me.mode==4) {me.d-=0.15*(Math.random()-0.1);me.val-=Math.random();}
 			else if (me.mode==5) me.d+=0.3*(Math.random()-0.5);
-			
+
 			me.val+=(M.getRestingVal(me.id)-me.val)*0.02;
 			me.val+=(Math.random()-0.5)*0.4;
 			me.d+=0.1*(Math.random()-0.5);
@@ -809,9 +809,9 @@ M.launch=function()
 			if (me.mode==3 && Math.random()<0.3) {me.d+=(Math.random()-0.5)*0.1;me.val+=(Math.random()-0.7)*10;}
 			if (me.mode==3 && Math.random()<0.03) {me.mode=4;}
 			if (me.mode==4 && Math.random()<0.3) {me.d+=(Math.random()-0.5)*0.1;me.val+=(Math.random()-0.3)*10;}
-			
+
 			if (me.val>(100+(Game.Objects['Bank'].level-1)*3) && me.d>0) me.d*=0.9;
-			
+
 			me.val+=me.d;
 			/*if (me.val<=0 && me.d<0)
 			{
@@ -830,10 +830,10 @@ M.launch=function()
 			if (me.val<5) me.val+=(5-me.val)*0.5;
 			if (me.val<5 && me.d<0) me.d*=0.95;
 			me.val=Math.max(me.val,1);
-			
+
 			me.vals.unshift(me.val);
 			if (me.vals.length>65) me.vals.pop();
-			
+
 			me.dur--;
 			//if (Math.random()<1/me.dur)
 			if (me.dur<=0)
@@ -847,26 +847,26 @@ M.launch=function()
 		M.toRedraw=Math.max(M.toRedraw,1);
 		M.ticks++;
 	}
-	
+
 	M.tickT=0;
 	M.logic=function()
 	{
 		//run each frame
-		
+
 		M.tickT++;
 		if (M.tickT>=Game.fps*M.secondsPerTick)
 		{
 			M.tickT=0;
 			M.tick();
 		}
-		
+
 		if (Game.T%10==0)
 		{
 			var doResize=false;
 			for (var i=0;i<M.goodsById.length;i++)
 			{
 				var me=M.goodsById[i];
-				
+
 				if (!me.active && me.building.highest>0) {me.active=true;me.hidden=false;M.toRedraw=2;if (me.l){M.updateGoodStyle(me.id);doResize=true;}}
 			}
 			if (doResize) M.onResize();
@@ -940,9 +940,9 @@ M.launch=function()
 		else ctx.fillRect(width-span,0,span,height);
 		ctx.lineWidth=2;
 		ctx.globalAlpha=1;
-		
+
 		var rows=(full?Math.ceil(width/span):1);
-		
+
 		for (var i=0;i<height/M.graphScale;i+=2)//horizontal lines (1 every 2 units)
 		{
 			if (i%10!=0) ctx.fillStyle=M.cols.line1; else ctx.fillStyle=M.cols.line2;
@@ -968,7 +968,7 @@ M.launch=function()
 				if (me.vals.length>=(2+iR))
 				{
 					var delta=M.goodDelta(me.id,iR);
-					
+
 					if (M.graphLines==0)
 					{
 						var min=Math.max(me.vals[0+iR],me.vals[1+iR]);
@@ -1009,13 +1009,13 @@ M.launch=function()
 	M.draw=function()
 	{
 		//run each draw frame
-		
+
 		if (Game.drawT%2==0 && M.toRedraw>0 && M.graph && M.graphCtx)
 		{
 			if (M.lastTickDrawn<M.ticks-1) M.toRedraw=2;
 			M.lastTickDrawn=M.ticks;
 			M.drawGraph(M.toRedraw==2?true:false);
-			
+
 			for (var i=0;i<M.goodsById.length;i++)
 			{
 				var me=M.goodsById[i];
@@ -1024,7 +1024,7 @@ M.launch=function()
 				if (val>=0) {me.symbolNumL.classList.add('bankSymbolUp');me.symbolNumL.classList.remove('bankSymbolDown');}
 				else if (val<0) {me.symbolNumL.classList.remove('bankSymbolUp');me.symbolNumL.classList.add('bankSymbolDown');}
 				else {me.symbolNumL.classList.remove('bankSymbolUp');me.symbolNumL.classList.remove('bankSymbolDown');}
-				
+
 				me.valL.innerHTML='$'+Beautify(me.val,2);
 				me.stockL.innerHTML=Beautify(me.stock);
 				//if (me.stock>0) me.stockL.style.color='#fff';
@@ -1032,7 +1032,7 @@ M.launch=function()
 				if (me.stock>0) me.stockBoxL.classList.add('green');
 				else me.stockBoxL.classList.remove('green');
 				me.stockMaxL.innerHTML='/'+Beautify(M.getGoodMaxStock(me));
-				
+
 				me.graphIconL.style.transform='translate(-8px,'+Math.floor((M.graph.height-me.vals[0]*M.graphScale))+'px) scale(0.5)';
 			}
 			M.toRedraw=0;
@@ -1051,27 +1051,27 @@ M.launch=function()
 				else l('bankOfficeUpgrade').classList.add('bankButtonOff');
 			}
 			l('bankBrokersText').innerHTML=M.brokers==0?'no brokers':M.brokers==1?'1 broker':(M.brokers+' brokers');
-			if (M.brokers<M.getMaxBrokers() && Game.cookies>=M.getBrokerPrice()) l('bankBrokersBuy').classList.remove('bankButtonOff');
+			if (M.brokers<M.getMaxBrokers() && Game.oranges>=M.getBrokerPrice()) l('bankBrokersBuy').classList.remove('bankButtonOff');
 			else l('bankBrokersBuy').classList.add('bankButtonOff');
-			
+
 			if (M.officeLevel<=1) l('bankLoan1').style.display='none';
 			else l('bankLoan1').style.removeProperty('display');
 			if (M.officeLevel<=3) l('bankLoan2').style.display='none';
 			else l('bankLoan2').style.removeProperty('display');
 			if (M.officeLevel<=4) l('bankLoan3').style.display='none';
 			else l('bankLoan3').style.removeProperty('display');
-			
+
 			for (var id=1;id<4;id++)
 			{
 				if (Game.hasBuff('Loan '+id) || Game.hasBuff('Loan '+id+' (interest)')) l('bankLoan'+id).classList.add('bankButtonOff');
 				else l('bankLoan'+id).classList.remove('bankButtonOff');
 			}
-			
+
 			var it=l('bankBalance');
 			it.innerHTML=(M.profit<0?'-':'')+'$'+Beautify(Math.abs(M.profit),2);
 			if (M.profit>0) {it.classList.add('bankSymbolUp');it.classList.remove('bankSymbolDown');}
 			else if (M.profit<0) {it.classList.add('bankSymbolDown');it.classList.remove('bankSymbolUp');}
-			
+
 			l('bankNextTick').innerHTML='Next tick in '+Game.sayTime((Game.fps*M.secondsPerTick)-M.tickT+30,-1)+'.';
 		}
 	}
